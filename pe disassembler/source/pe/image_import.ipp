@@ -3,6 +3,38 @@
 #pragma once
 
 #include "../pe disassembler.hpp"
+#include "image_import.hpp"
+
+inline image_import_list::image_import::thunk_iterator<IMAGE_THUNK_DATA32>::thunk_iterator() :
+	IMAGE_THUNK_DATA32({})
+{ }
+
+inline image_import_list::image_import::thunk_iterator<IMAGE_THUNK_DATA32>::thunk_iterator(IMAGE_THUNK_DATA32&& th) :
+	IMAGE_THUNK_DATA32(th)
+{ }
+
+inline image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>>::thunk_iterator(void* const base, unsigned long const offset) :
+	rva<IMAGE_THUNK_DATA32>(base, offset)
+{ }
+
+inline image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>>::thunk_iterator(rva<IMAGE_THUNK_DATA32> const& rhs) :
+	rva<IMAGE_THUNK_DATA32>(rhs)
+{ }
+
+inline bool image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>>::operator!=(thunk_iterator<IMAGE_THUNK_DATA32> const& rhs)
+{
+	return (*this)->u1.AddressOfData != rhs.u1.AddressOfData;
+}
+
+inline image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>> image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>>::operator++()
+{
+	return *this = rva<IMAGE_THUNK_DATA32>(base, offset) + 1;
+}
+
+inline image_import_list::image_import::thunk image_import_list::image_import::thunk_iterator<rva<IMAGE_THUNK_DATA32>>::operator*()
+{
+	return thunk(reinterpret_cast<void *>(base), offset);
+}
 
 inline image_import_list::image_import_iterator<IMAGE_IMPORT_DESCRIPTOR>::image_import_iterator() :
 	IMAGE_IMPORT_DESCRIPTOR({})

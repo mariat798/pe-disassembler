@@ -20,10 +20,48 @@ public:
 	{
 	public:
 
+		class thunk : public rva<IMAGE_THUNK_DATA32>
+		{
+		public:
+
+			thunk(void* const base, unsigned long const offset);
+
+			const char* name();
+		};
+
+		template<typename T>
+		class thunk_iterator : T
+		{ };
+
+		template<>
+		class thunk_iterator<IMAGE_THUNK_DATA32> : public IMAGE_THUNK_DATA32
+		{
+		public:
+
+			thunk_iterator();
+			thunk_iterator(IMAGE_THUNK_DATA32&& th);
+		};
+
+		template<>
+		class thunk_iterator<rva<IMAGE_THUNK_DATA32>> : public rva<IMAGE_THUNK_DATA32>
+		{
+		public:
+
+			thunk_iterator(void* const base, unsigned long const offset);
+			thunk_iterator(rva<IMAGE_THUNK_DATA32> const& rhs);
+
+			bool operator!=(thunk_iterator<IMAGE_THUNK_DATA32> const& rhs);
+			thunk_iterator<rva<IMAGE_THUNK_DATA32>> operator++();
+			thunk operator*();
+		};
+
 		image_import(void* const base, unsigned long const offset);
 		image_import(rva<IMAGE_IMPORT_DESCRIPTOR> const rhs);
 
-		rva<IMAGE_THUNK_DATA32> first_thunk();
+		thunk_iterator<rva<IMAGE_THUNK_DATA32>> begin();
+		thunk_iterator<IMAGE_THUNK_DATA32> end();
+
+		//rva<IMAGE_THUNK_DATA32> first_thunk();
 		const char* name();
 	};
 

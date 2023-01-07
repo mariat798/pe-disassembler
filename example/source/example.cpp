@@ -52,6 +52,11 @@ void main()
 	for (auto i : imports)
 	{
 		std::cout << i.name() << ":" << std::endl;
+
+		for (auto t : i)
+			std::cout << "\t" << t.name() << std::endl;
+
+		std::cout << std::endl;
 	}
 
 	/*for (auto i = 0;; i++)
