@@ -141,10 +141,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\pe disassembler.hpp" />
-    <ClInclude Include="source\pe\image_base_relocation.hpp" />
+    <ClInclude Include="source\pe\image_base_relocations.hpp" />
     <ClInclude Include="source\pe\dos_header.hpp" />
     <ClInclude Include="source\pe\header.hpp" />
     <ClInclude Include="source\pe\header.ipp" />
+    <ClInclude Include="source\pe\image_base_relocations.ipp" />
     <ClInclude Include="source\pe\image_export.hpp" />
     <ClInclude Include="source\pe\image_import.hpp" />
     <ClInclude Include="source\pe\image_import.ipp" />
@@ -161,7 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\pe\dos_header.cpp" />
-    <ClCompile Include="source\pe\image_base_relocation.cpp" />
+    <ClCompile Include="source\pe\image_base_relocations.cpp" />
     <ClCompile Include="source\pe\image_export.cpp" />
     <ClCompile Include="source\pe\image_import.cpp" />
     <ClCompile Include="source\pe\nt_header.cpp" />

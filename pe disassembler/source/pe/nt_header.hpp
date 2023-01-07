@@ -18,8 +18,10 @@ public:
 	image_import_list
 	get_directory<image_import_list>();
 	template<>
-	image_base_relocation
-	get_directory<image_base_relocation>();
+	image_base_relocations
+	get_directory<image_base_relocations>();
+
+	section_list get_sections();
 };
 
 #include "nt_header.ipp"

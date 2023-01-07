@@ -23,10 +23,10 @@ nt_header::get_directory<image_import_list>()
 }
 
 template<>
-inline image_base_relocation
-nt_header::get_directory<image_base_relocation>()
+inline image_base_relocations
+nt_header::get_directory<image_base_relocations>()
 {
-	return image_base_relocation(
+	return image_base_relocations(
 		reinterpret_cast<void*>(base),
 		(*this)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
 }

@@ -11,39 +11,29 @@ pe::pe(void* const ptr, std::size_t const size)
 
 	std::memcpy(data.get(), ptr, nt->OptionalHeader.SizeOfHeaders);
 
-	auto const sect = section(data.get(), dos->e_lfanew + sizeof(IMAGE_NT_HEADERS32));
 	auto const delta = reinterpret_cast<std::uintptr_t>(data.get()) - nt->OptionalHeader.ImageBase;
 	
-	for (auto i = 0; i < nt->FileHeader.NumberOfSections; i++)
+	for (auto section: nt.get_sections())
 	{
-		auto const s = sect[i];
-		auto sz = s->Name;
+		auto sz = section->Name;
 
-		if (0 == s->SizeOfRawData)
+		if (0 == section->SizeOfRawData)
 			continue;
 
-		std::memcpy(data.get() + s->VirtualAddress,
-					reinterpret_cast<unsigned char const*>(ptr) + s->PointerToRawData,
-					s->SizeOfRawData);
+		std::memcpy(data.get() + section->VirtualAddress,
+					reinterpret_cast<unsigned char const*>(ptr) + section->PointerToRawData,
+					section->SizeOfRawData);
 	}
 
 	auto new_nt = nt_header(data.get(), dos_header(data.get())->e_lfanew);
-	auto reloc = new_nt.get_directory<image_base_relocation>();
 
-	while (reloc->VirtualAddress)
-	{
-		auto const entries = (reloc->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(WORD);
-		auto first_patch = rva<WORD>(&reloc, sizeof(IMAGE_BASE_RELOCATION));
-
-		for (auto i = 0u; i < entries; i++)
+	for (auto reloc : new_nt.get_directory<image_base_relocations>())
+		for (auto p : reloc)
 		{
-			auto patch = rva<DWORD>(data.get(), reloc->VirtualAddress + (*first_patch[i] & 0xFFF));
+			auto patch = rva<DWORD>(data.get(), reloc->VirtualAddress + *p);
 
 			*patch += delta;
 		}
-
-		reloc.advance(reloc->SizeOfBlock);
-	}
 
 	if (!valid_pe())
 		throw std::runtime_error("invalid PE");

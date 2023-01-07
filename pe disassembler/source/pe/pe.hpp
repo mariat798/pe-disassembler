@@ -8,7 +8,7 @@
 #include "dos_header.hpp"
 #include "image_export.hpp"
 #include "image_import.hpp"
-#include "image_base_relocation.hpp"
+#include "image_base_relocations.hpp"
 #include "nt_header.hpp"
 
 class pe
