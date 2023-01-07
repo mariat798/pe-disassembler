@@ -28,11 +28,6 @@ image_import_list::image_import::thunk_iterator<IMAGE_THUNK_DATA32> image_import
 	return thunk_iterator<IMAGE_THUNK_DATA32>();
 }
 
-//rva<IMAGE_THUNK_DATA32> image_import_list::image_import::first_thunk()
-//{
-//	return rva<IMAGE_THUNK_DATA32>(base, (*this)->OriginalFirstThunk);
-//}
-
 const char* image_import_list::image_import::name()
 {
 	return reinterpret_cast<const char*>(base + (*this)->Name);

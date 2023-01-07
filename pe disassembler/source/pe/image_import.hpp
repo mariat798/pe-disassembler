@@ -61,7 +61,6 @@ public:
 		thunk_iterator<rva<IMAGE_THUNK_DATA32>> begin();
 		thunk_iterator<IMAGE_THUNK_DATA32> end();
 
-		//rva<IMAGE_THUNK_DATA32> first_thunk();
 		const char* name();
 	};
 
