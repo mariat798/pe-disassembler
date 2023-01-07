@@ -14,10 +14,10 @@ nt_header::get_directory<image_export>()
 }
 
 template<>
-inline image_import
-nt_header::get_directory<image_import>()
+inline image_import_list
+nt_header::get_directory<image_import_list>()
 {
-	return image_import(
+	return image_import_list(
 		reinterpret_cast<void*>(base),
 		(*this)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
 }

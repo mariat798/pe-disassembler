@@ -39,6 +39,18 @@ inline T* rva<T>::operator&() const
 }
 
 template<typename T>
+inline rva<T>& rva<T>::operator++()
+{
+	return rva<T>(base, offset + sizeof(T));
+}
+
+template<typename T>
+inline rva<T> rva<T>::operator+(unsigned const rhs) const
+{
+	return rva<T>(base, offset + sizeof(T) * rhs);
+}
+
+template<typename T>
 inline bool rva<T>::operator==(const rva<T> rhs)
 {
 	return base == rhs.base && offset == rhs.offset;
@@ -48,6 +60,12 @@ template<typename T>
 inline bool rva<T>::operator!=(const rva<T> rhs)
 {
 	return !(*this == rhs);
+}
+
+template<typename T>
+inline bool rva<T>::operator!()
+{
+	return !base;
 }
 
 template<typename T>

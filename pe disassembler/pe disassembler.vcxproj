@@ -147,6 +147,7 @@
     <ClInclude Include="source\pe\header.ipp" />
     <ClInclude Include="source\pe\image_export.hpp" />
     <ClInclude Include="source\pe\image_import.hpp" />
+    <ClInclude Include="source\pe\image_import.ipp" />
     <ClInclude Include="source\pe\nt_header.hpp" />
     <ClInclude Include="source\pe\nt_header.ipp" />
     <ClInclude Include="source\pe\pe.hpp" />

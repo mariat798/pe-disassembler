@@ -15,8 +15,8 @@ public:
 	image_export
 	get_directory<image_export>();
 	template<>
-	image_import
-	get_directory<image_import>();
+	image_import_list
+	get_directory<image_import_list>();
 	template<>
 	image_base_relocation
 	get_directory<image_base_relocation>();

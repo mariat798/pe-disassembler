@@ -23,27 +23,21 @@ pe::pe(void* const ptr, std::size_t const size)
 			continue;
 
 		std::memcpy(data.get() + s->VirtualAddress,
-					reinterpret_cast<unsigned char const*>(ptr) + sect->PointerToRawData,
-					sect->SizeOfRawData);
+					reinterpret_cast<unsigned char const*>(ptr) + s->PointerToRawData,
+					s->SizeOfRawData);
 	}
 
-	unsigned char * pBase = data.get();
-	auto* pOpt = &reinterpret_cast<IMAGE_NT_HEADERS32*>(pBase + reinterpret_cast<_IMAGE_DOS_HEADER*>((uintptr_t)pBase)->e_lfanew)->OptionalHeader;
-	IMAGE_BASE_RELOCATION* pRelocData = reinterpret_cast<IMAGE_BASE_RELOCATION*>(pBase + pOpt->DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
-
 	auto new_nt = nt_header(data.get(), dos_header(data.get())->e_lfanew);
-
 	auto reloc = new_nt.get_directory<image_base_relocation>();
 
 	while (reloc->VirtualAddress)
 	{
-		auto s = reloc->SizeOfBlock;
 		auto const entries = (reloc->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(WORD);
 		auto first_patch = rva<WORD>(&reloc, sizeof(IMAGE_BASE_RELOCATION));
 
 		for (auto i = 0u; i < entries; i++)
 		{
-			auto patch = rva<DWORD>(&first_patch, *first_patch[i] & 0xFFF);
+			auto patch = rva<DWORD>(data.get(), reloc->VirtualAddress + (*first_patch[i] & 0xFFF));
 
 			*patch += delta;
 		}

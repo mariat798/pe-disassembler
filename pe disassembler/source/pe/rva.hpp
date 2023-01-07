@@ -20,8 +20,12 @@ public:
 	rva<T> operator[](unsigned const i) const;
 	T* operator&() const;
 
+	rva<T>& operator++();
+	rva<T> operator+(unsigned const rhs) const;
+
 	bool operator==(const rva<T> rhs);
 	bool operator!=(const rva<T> rhs);
+	bool operator!();
 
 	void advance(unsigned long const by);
 };

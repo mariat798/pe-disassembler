@@ -145,6 +145,11 @@
   <ItemGroup>
     <ClCompile Include="source\example.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pe disassembler\pe disassembler.vcxproj">
+      <Project>{11e961bd-b98d-4600-ad8c-a2b9303c9b51}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -33,37 +33,49 @@ void main()
 	auto dos = mb.get_dos();
 	auto nt = mb.get_nt();
 
-	auto imports = nt.get_directory<image_import>();
+	auto imports = nt.get_directory<image_import_list>();
+	auto exports = nt.get_directory<image_export>();
 
-	//auto hModule = (void*)LoadLibrary(LR"(C:\Users\cole\Desktop\messagebox.dll)");
-	//auto p = (void*)mb.data.get();
-	auto hModule = (void*)mb.data.get();
-	const auto pDOSHeaders = reinterpret_cast<IMAGE_DOS_HEADER*>(hModule);
-	const auto pNTHeaders = reinterpret_cast<IMAGE_NT_HEADERS32*>(std::uintptr_t(hModule) + pDOSHeaders->e_lfanew);
-	const auto pImportList = reinterpret_cast<IMAGE_IMPORT_DESCRIPTOR*>(std::uintptr_t(hModule) + pNTHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+	std::cout << "=========================" << std::endl;
+	std::cout << "\tEXPORTS" << std::endl;
+	std::cout << "=========================\n" << std::endl;
 
-	for (auto i = 0;; i++)
+	for (auto e : exports)
 	{
-		const auto pImport = pImportList[i];
-		const auto sz1 = reinterpret_cast<const char*>(std::uintptr_t(hModule) + pImport.Name);
+		std::cout << e.first << " at IMAGE_BASE + 0x" << std::hex << e.second << std::endl;
+	}
 
+	std::cout << "\n=========================" << std::endl;
+	std::cout << "\tIMPORTS" << std::endl;
+	std::cout << "=========================\n" << std::endl;
+
+	for (auto i : imports)
+	{
+		std::cout << i.name() << ":" << std::endl;
+	}
+
+	/*for (auto i = 0;; i++)
+	{
 		auto d = image_import(imports[i]);
+
+		if (!d)
+			break;
+
+		std::cout << &d.name() << std::endl;
 		auto f = d.first_thunk();
-		auto* im = &pImportList[i];
 		
 		for (auto j = 0;; j++) {
-			auto& o = reinterpret_cast<IMAGE_THUNK_DATA32*>(std::uintptr_t(hModule) + pImport.OriginalFirstThunk)[j];
-			const auto szImport = reinterpret_cast<const char*>((o.u1.Ordinal & IMAGE_ORDINAL_FLAG32) > 0 ? IMAGE_ORDINAL32(o.u1.Ordinal)
-				: std::uintptr_t(reinterpret_cast<IMAGE_IMPORT_BY_NAME*>(std::uintptr_t(hModule) + o.u1.AddressOfData)->Name));
 
 			auto f1 = image_thunk_data(f[j]);
 
-			auto sz = f1.name();
+			auto name = f1.name();
 
-			std::cout << *sz << std::endl;
+			if (!name)
+				break;
+
+			std::cout << "\t" << &name << std::endl;
 		}
-		std::cout << "test" << std::endl;
-	}
+	}*/
 
 	while (true);
 }
